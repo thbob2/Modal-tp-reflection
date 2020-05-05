@@ -1,11 +1,11 @@
 
-Description textuelle -- Date : Sat May 02 19:41:55 EDT 2020
+Description textuelle -- Date : Tue May 05 14:06:24 EDT 2020
 -------------------------------------------------------------------------------------------------------------------------------------
 Information projet
 -------------------------------------------------------------------------------------------------------------------------------------
 Nom du projet: P1
-Nombwe de packages: 1
-Nombwe de classe: 2
+Nombre de packages: 1
+Nombre de classe: 2
 Java version: 11.0.6
 OS: Linux
 -------------------------------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ Nombre des attributs privés: 0
 Liste et types des attributs privés : [ ]
 Liste des constructeurs: [ P1.Entreprise ]
 Nombre de méthodes: 2
-Liste des méthodes: [ empAdresse, printName, ]
-Type de retour des méthodes: [ empAdresse: void, printName: void, ]
-Paramètres et types des méthodes: empAdresse[param1: String, ], printName[], 
+Liste des méthodes: [ printName, empAdresse, ]
+Type de retour des méthodes: [ printName: void, empAdresse: void, ]
+Paramètres et types des méthodes: printName[], empAdresse[param1: String, ], 
 -------------------------------------------------------------------------------------------------------------------------------------

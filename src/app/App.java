@@ -1,6 +1,8 @@
 package app;
 
 import java.lang.reflect.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,7 +25,8 @@ public class App {
     public static void main(String[] args) throws Exception {
         ExceptionSaver es = new ExceptionSaver();
         String results = System.getProperty("user.dir")+"/results.txt";
-        File project = new File(System.getProperty("user.dir")+"/src/P1");
+        File project = new File(System.getProperty("user.dir")+"/bin/P1");
+        
         File[] files = new File(project.getPath()).listFiles();
         File[] dirs = new File(project.getPath()).listFiles(new FileFilter() {
             @Override
@@ -32,9 +35,7 @@ public class App {
             }
         });
         
-        Class employe = Employee.class;
-        Class entreprise = Entreprise.class;
-        
+
         try {
             FileWriter fw = new FileWriter(results,false);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -50,9 +51,9 @@ public class App {
 			bw.newLine();
 			bw.write("Nom du projet: "+project.getName());
 			bw.newLine();
-			bw.write("Nombwe de packages: "+(1+dirs.length));
+			bw.write("Nombre de packages: "+(1+dirs.length));
 			bw.newLine();
-			bw.write("Nombwe de classe: "+files.length);
+			bw.write("Nombre de classe: "+files.length);
 			bw.newLine();
 			bw.write("Java version: "+System.getProperty("java.version"));
 			bw.newLine();
@@ -64,158 +65,90 @@ public class App {
 			bw.newLine();
             bw.write("-------------------------------------------------------------------------------------------------------------------------------------");
             bw.newLine();
-            try{
-                bw.write("Class 1:");
-                bw.newLine();
-                bw.write("Nom Package: "+employe.getPackageName());
 
-                bw.newLine();
-                bw.write("Nom Class: "+ employe.getSimpleName());
-                bw.newLine();
-                bw.write("Nombre des attributs publics: "+ employe.getFields().length);
-                bw.newLine();
-                bw.write("Liste et types des attributs publics: [ ");
-                Field[] fields = employe.getFields();
-                for (Field oneField : fields) {
-                    Field field = employe.getField(oneField.getName());
-                    bw.write(field.getName() + " - " + field.getType().getSimpleName() + ", ");
-                }
-                bw.write("]");
-                bw.newLine();					
-                bw.write("Nombre des attributs privés: "+(employe.getDeclaredFields().length - employe.getFields().length));
-                bw.newLine();
-                bw.write("Liste et types des attributs privés : [ ");	
-                List<Field> listAtr = new ArrayList<Field>(); 
-                Field[] df = employe.getDeclaredFields();
-                Field[] types = employe.getFields();
-                for (Field f : df) {
-                    listAtr.add(f);
-                }
-                for (Field f : types) {
-                    listAtr.remove(f);
-                }
-                for (int k = 0; k < listAtr.size(); k++) {
-                    Field privateField = listAtr.get(k);
-                    bw.write(privateField.getName() + " - " + privateField.getType().getSimpleName() + ", ");
-                }
-                bw.write("]");
-                bw.newLine();
-                bw.write("Liste des constructeurs: [ ");
-                Constructor[] constructor = employe.getDeclaredConstructors();
-                for (Constructor c: constructor) {
-                    bw.write(c.getName() + " ");
-                }
-                bw.write("]");
-                bw.newLine();
-                Method[] declaredMethodes = employe.getDeclaredMethods();
-                bw.write("Nombre de méthodes: " + declaredMethodes.length);
-                bw.newLine();
-                bw.write("Liste des méthodes: [ ");
-                for (Method meth : declaredMethodes) {
-                    bw.write(meth.getName() + ", ");
-                }
-                bw.write("]");
-                bw.newLine();
-                bw.write("Type de retour des méthodes: [ ");
-                for (Method meth : declaredMethodes) {
-                    bw.write(meth.getName() + ": " + meth.getReturnType().getSimpleName() +", ");
-                }
-                bw.write("]");
-                bw.newLine();
-                bw.write("Paramètres et types des méthodes: ");
-                for (Method meth : declaredMethodes) {
-                    bw.write(meth.getName()+"[");
-                    Class[] pTypes = meth.getParameterTypes();
-                    for (int k = 0; k < pTypes.length; k++) {
-                        bw.write("param" + (k+1) + ": " + pTypes[k].getSimpleName() +", ");
-                    }
-                    bw.write("], ");
-                }
-                bw.newLine();
-                bw.write("-------------------------------------------------------------------------------------------------------------------------------------");
-                bw.newLine();			
-            } catch (Exception e ){
-                System.out.println("Exception generer dans Class 1");
-                es.save(e);
-            }
-
-            try {
-                bw.write("Class 2:");
-                bw.newLine();
-                bw.write("Nom Package: "+entreprise.getPackageName());
-    
-                bw.newLine();
-                bw.write("Nom Class: "+ entreprise.getSimpleName());
-                bw.newLine();
-                bw.write("Nombre des attributs publics: "+ entreprise.getFields().length);
-                bw.newLine();
-                bw.write("Liste et types des attributs publics: [ ");
-                Field[] fields = entreprise.getFields();
-                for (Field oneField : fields) {
-                    Field field = entreprise.getField(oneField.getName());
-                    bw.write(field.getName() + " - " + field.getType().getSimpleName() + ", ");
-                }
-                bw.write("]");
-                bw.newLine();					
-                bw.write("Nombre des attributs privés: "+(entreprise.getDeclaredFields().length - entreprise.getFields().length));
-                bw.newLine();
-                bw.write("Liste et types des attributs privés : [ ");	
-                List<Field> listAtr = new ArrayList<Field>(); 
-                Field[] df = entreprise.getDeclaredFields();
-                Field[] types = entreprise.getFields();
-                for (Field f : df) {
-                    listAtr.add(f);
-                }
-                for (Field f : types) {
-                    listAtr.remove(f);
-                }
-                for (int k = 0; k < listAtr.size(); k++) {
-                    Field privateField = listAtr.get(k);
-                    bw.write(privateField.getName() + " - " + privateField.getType().getSimpleName() + ", ");
-                }
-                bw.write("]");
-                bw.newLine();
-                bw.write("Liste des constructeurs: [ ");
-                Constructor[] constructor = entreprise.getDeclaredConstructors();
-                for (Constructor c: constructor) {
-                    bw.write(c.getName() + " ");
-                }
-                bw.write("]");
-                bw.newLine();
-                Method[] declaredMethodes = entreprise.getDeclaredMethods();
-                bw.write("Nombre de méthodes: " + declaredMethodes.length);
-                bw.newLine();
-                bw.write("Liste des méthodes: [ ");
-                for (Method meth : declaredMethodes) {
-                    bw.write(meth.getName() + ", ");
-                }
-                bw.write("]");
-                bw.newLine();
-                bw.write("Type de retour des méthodes: [ ");
-                for (Method meth : declaredMethodes) {
-                    bw.write(meth.getName() + ": " + meth.getReturnType().getSimpleName() +", ");
-                }
-                bw.write("]");
-                bw.newLine();
-                bw.write("Paramètres et types des méthodes: ");
-                for (Method meth : declaredMethodes) {
-                    bw.write(meth.getName()+"[");
-                    Class[] pTypes = meth.getParameterTypes();
-                    for (int k = 0; k < pTypes.length; k++) {
-                        bw.write("param" + (k+1) + ": " + pTypes[k].getSimpleName() +", ");
-                    }
-                    bw.write("], ");
-                }
-                bw.newLine();
-                bw.write("-------------------------------------------------------------------------------------------------------------------------------------");
-            }
-            catch (Exception e ){
-                System.out.println("Exception génerer dans class 2");
-                es.save(e);
-            }
+            int j = 1;
+            for (File f : files){
             
+                URL[] classURL = {f.toURI().toURL()};
+                URLClassLoader urlClassLoader = new URLClassLoader(classURL);
+                Class currentClass = urlClassLoader.loadClass("P1."+f.getName().substring(0,f.getName().lastIndexOf('.')));
 
+                try{
+                    bw.write("Class "+j+":");
+                    bw.newLine();
+                    bw.write("Nom Package: "+currentClass.getPackageName());
 
+                    bw.newLine();
+                    bw.write("Nom Class: "+ currentClass.getSimpleName());
+                    bw.newLine();
+                    bw.write("Nombre des attributs publics: "+ currentClass.getFields().length);
+                    bw.newLine();
+                    bw.write("Liste et types des attributs publics: [ ");
+                    Field[] fields = currentClass.getFields();
+                    for (Field oneField : fields) {
+                        Field field = currentClass.getField(oneField.getName());
+                        bw.write(field.getName() + " - " + field.getType().getSimpleName() + ", ");
+                    }
+                    bw.write("]");
+                    bw.newLine();					
+                    bw.write("Nombre des attributs privés: "+(currentClass.getDeclaredFields().length - currentClass.getFields().length));
+                    bw.newLine();
+                    bw.write("Liste et types des attributs privés : [ ");	
+                    List<Field> listAtr = new ArrayList<Field>(); 
+                    Field[] df = currentClass.getDeclaredFields();
+                    Field[] types = currentClass.getFields();
+                    for (Field field: df) {
+                        listAtr.add(field);
+                    }
+                    for (Field  t : types) {
+                        listAtr.remove(t);
+                    }
+                    for (int k = 0; k < listAtr.size(); k++) {
+                        Field privateField = listAtr.get(k);
+                        bw.write(privateField.getName() + " - " + privateField.getType().getSimpleName() + ", ");
+                    }
+                    bw.write("]");
+                    bw.newLine();
+                    bw.write("Liste des constructeurs: [ ");
+                    Constructor[] constructor = currentClass.getDeclaredConstructors();
+                    for (Constructor c: constructor) {
+                        bw.write(c.getName() + " ");
+                    }
+                    bw.write("]");
+                    bw.newLine();
+                    Method[] declaredMethodes = currentClass.getDeclaredMethods();
+                    bw.write("Nombre de méthodes: " + declaredMethodes.length);
+                    bw.newLine();
+                    bw.write("Liste des méthodes: [ ");
+                    for (Method meth : declaredMethodes) {
+                        bw.write(meth.getName() + ", ");
+                    }
+                    bw.write("]");
+                    bw.newLine();
+                    bw.write("Type de retour des méthodes: [ ");
+                    for (Method meth : declaredMethodes) {
+                        bw.write(meth.getName() + ": " + meth.getReturnType().getSimpleName() +", ");
+                    }
+                    bw.write("]");
+                    bw.newLine();
+                    bw.write("Paramètres et types des méthodes: ");
+                    for (Method meth : declaredMethodes) {
+                        bw.write(meth.getName()+"[");
+                        Class[] pTypes = meth.getParameterTypes();
+                        for (int k = 0; k < pTypes.length; k++) {
+                            bw.write("param" + (k+1) + ": " + pTypes[k].getSimpleName() +", ");
+                        }
+                        bw.write("], ");
+                    }
+                    bw.newLine();
+                    bw.write("-------------------------------------------------------------------------------------------------------------------------------------");
+                    bw.newLine();			
+                } catch (Exception e ){
+                    System.out.println("Exception generer dans Class 1");
+                    es.save(e);
+                }
+                j+=1;
+            }
             bw.close();
             fw.close();
         }catch (final IOException ioe) {
@@ -256,5 +189,8 @@ public class App {
             es.save(ee);
             es.add(ee);
         }
-}
+    
+    
+    }
+
 }
